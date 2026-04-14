@@ -59,17 +59,7 @@ export function Hero() {
       </div>
 
       {/* Draggable blobs — z-20 so they sit above content */}
-      <div className="absolute inset-0 z-20">
-        <MorphingBlob
-          color="bg-sunshine" size="h-52 w-52" position="absolute top-2 left-2"
-          border="border-4 border-white/30" variant={0} draggable
-        >
-          <MorphingBlob
-            color="bg-peach" size="h-28 w-28" position="relative"
-            border="border-3 border-white/20" variant={2}
-          />
-        </MorphingBlob>
-
+      <div className="pointer-events-none absolute inset-0 z-20">
         <MorphingBlob
           color="bg-lavender/70" size="h-28 w-28" position="absolute top-10 right-16"
           border="border-3 border-white/25" variant={3} draggable

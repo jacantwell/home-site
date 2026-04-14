@@ -166,17 +166,7 @@ export function AboutHouse() {
         </motion.div>
       </div>
 
-      <div className="absolute inset-0 z-20">
-        <MorphingBlob
-          color="bg-jasper/50" size="h-48 w-48" position="absolute top-4 left-4"
-          border="border-4 border-jasper/30" variant={1} draggable
-        >
-          <MorphingBlob
-            color="bg-peach" size="h-28 w-28" position="relative"
-            border="border-3 border-jasper/20" variant={3}
-          />
-        </MorphingBlob>
-
+      <div className="pointer-events-none absolute inset-0 z-20">
         <MorphingBlob
           color="bg-damia/40" size="h-28 w-28" position="absolute top-6 right-12"
           border="border-3 border-damia/25" variant={2} draggable

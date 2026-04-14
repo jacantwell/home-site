@@ -85,7 +85,7 @@ export function ApplicationForm() {
             </CardContent>
           </Card>
         </motion.div>
-        <div className="absolute inset-0 z-20">
+        <div className="pointer-events-none absolute inset-0 z-20">
           <MorphingBlob
             color="bg-sky/40" size="h-40 w-40" position="absolute top-6 right-4"
             border="border-4 border-sky/30" variant={3} draggable
@@ -195,7 +195,7 @@ export function ApplicationForm() {
         </motion.div>
       </div>
 
-      <div className="absolute inset-0 z-20">
+      <div className="pointer-events-none absolute inset-0 z-20">
         <MorphingBlob
           color="bg-sky/40" size="h-40 w-40" position="absolute top-6 right-4"
           border="border-4 border-sky/30" variant={3} draggable

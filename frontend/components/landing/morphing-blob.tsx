@@ -71,7 +71,7 @@ export function MorphingBlob({
     return (
       <div
         ref={constraintRef}
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-12"
       >
         <motion.div
           ref={ref}

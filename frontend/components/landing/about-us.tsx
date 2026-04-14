@@ -146,17 +146,7 @@ export function AboutUs() {
         </motion.div>
       </div>
 
-      <div className="absolute inset-0 z-20">
-        <MorphingBlob
-          color="bg-damia/60" size="h-48 w-48" position="absolute top-4 right-4"
-          border="border-4 border-damia/30" variant={2} draggable
-        >
-          <MorphingBlob
-            color="bg-lavender" size="h-28 w-28" position="relative"
-            border="border-3 border-damia/20" variant={0}
-          />
-        </MorphingBlob>
-
+      <div className="pointer-events-none absolute inset-0 z-20">
         <MorphingBlob
           color="bg-jasper/40" size="h-32 w-32" position="absolute top-6 left-8"
           border="border-3 border-jasper/25" variant={1} draggable
@@ -175,11 +165,6 @@ export function AboutUs() {
         <MorphingBlob
           color="bg-sunshine/50" size="h-24 w-24" position="absolute top-1/2 right-8"
           border="border-3 border-sunshine/30" variant={0} draggable
-        />
-
-        <MorphingBlob
-          color="bg-peach/40" size="h-20 w-20" position="absolute bottom-8 right-1/4"
-          border="border-2 border-peach/30" variant={2} draggable
         />
       </div>
     </section>
