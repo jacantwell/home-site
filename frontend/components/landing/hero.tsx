@@ -13,43 +13,6 @@ const heroPhotos = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-jasper via-damia to-micol py-20 px-6 text-center text-white sm:py-28">
-      {/* Morphing decorative blobs — nested, sharp, bold */}
-      <div className="pointer-events-none absolute inset-0">
-        {/* Large top-left nested cluster */}
-        <MorphingBlob
-          color="bg-sunshine" size="h-80 w-80" position="absolute -top-20 -left-20"
-          border="border-4 border-white/30" parallaxSpeed={0.3} variant={0}
-        >
-          <MorphingBlob
-            color="bg-peach" size="h-48 w-48" position="relative"
-            border="border-3 border-white/20" variant={2}
-          />
-        </MorphingBlob>
-
-        {/* Mid-right small accent */}
-        <MorphingBlob
-          color="bg-lavender/70" size="h-28 w-28" position="absolute top-8 right-12"
-          border="border-3 border-white/25" parallaxSpeed={0.15} variant={3}
-        />
-
-        {/* Bottom-right nested cluster */}
-        <MorphingBlob
-          color="bg-mint" size="h-64 w-64" position="absolute -bottom-16 -right-10"
-          border="border-4 border-white/30" parallaxSpeed={-0.2} variant={1}
-        >
-          <MorphingBlob
-            color="bg-sky/60" size="h-36 w-36" position="relative"
-            border="border-3 border-white/20" variant={3}
-          />
-        </MorphingBlob>
-
-        {/* Bottom-left small accent */}
-        <MorphingBlob
-          color="bg-jasper-light/60" size="h-24 w-24" position="absolute bottom-4 left-1/4"
-          border="border-3 border-white/20" parallaxSpeed={-0.1} variant={2}
-        />
-      </div>
-
       <div className="relative z-10">
         <motion.h1
           className="font-display text-5xl font-bold tracking-tight sm:text-7xl"
@@ -93,6 +56,39 @@ export function Hero() {
             </motion.div>
           ))}
         </motion.div>
+      </div>
+
+      {/* Draggable blobs — z-20 so they sit above content */}
+      <div className="absolute inset-0 z-20">
+        <MorphingBlob
+          color="bg-sunshine" size="h-52 w-52" position="absolute top-2 left-2"
+          border="border-4 border-white/30" variant={0} draggable
+        >
+          <MorphingBlob
+            color="bg-peach" size="h-28 w-28" position="relative"
+            border="border-3 border-white/20" variant={2}
+          />
+        </MorphingBlob>
+
+        <MorphingBlob
+          color="bg-lavender/70" size="h-28 w-28" position="absolute top-10 right-16"
+          border="border-3 border-white/25" variant={3} draggable
+        />
+
+        <MorphingBlob
+          color="bg-mint" size="h-44 w-44" position="absolute bottom-4 right-4"
+          border="border-4 border-white/30" variant={1} draggable
+        >
+          <MorphingBlob
+            color="bg-sky/60" size="h-24 w-24" position="relative"
+            border="border-3 border-white/20" variant={3}
+          />
+        </MorphingBlob>
+
+        <MorphingBlob
+          color="bg-jasper-light/60" size="h-24 w-24" position="absolute bottom-8 left-1/3"
+          border="border-3 border-white/20" variant={2} draggable
+        />
       </div>
     </section>
   );
