@@ -153,11 +153,11 @@ export function AboutUs() {
         />
 
         <MorphingBlob
-          color="bg-micol/50" size="h-44 w-44" position="absolute bottom-4 left-4"
+          color="bg-micol/35" size="h-44 w-44" position="absolute bottom-4 left-4"
           border="border-4 border-micol/30" variant={3} draggable
         >
           <MorphingBlob
-            color="bg-mint" size="h-24 w-24" position="relative"
+            color="bg-mint/30" size="h-24 w-24" position="relative"
             border="border-3 border-micol/20" variant={1}
           />
         </MorphingBlob>

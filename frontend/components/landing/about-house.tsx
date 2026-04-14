@@ -178,17 +178,17 @@ export function AboutHouse() {
         />
 
         <MorphingBlob
-          color="bg-sunshine/60" size="h-44 w-44" position="absolute bottom-4 right-4"
+          color="bg-sunshine/35" size="h-44 w-44" position="absolute bottom-4 right-4"
           border="border-4 border-sunshine/40" variant={0} draggable
         >
           <MorphingBlob
-            color="bg-sky/50" size="h-24 w-24" position="relative"
+            color="bg-sky/30" size="h-24 w-24" position="relative"
             border="border-3 border-sky/30" variant={2}
           />
         </MorphingBlob>
 
         <MorphingBlob
-          color="bg-lavender/50" size="h-24 w-24" position="absolute bottom-8 left-1/3"
+          color="bg-lavender/40" size="h-24 w-24" position="absolute bottom-8 left-1/3"
           border="border-3 border-lavender/30" variant={3} draggable
         />
       </div>
