@@ -53,6 +53,13 @@ export async function vote(
   return res.json();
 }
 
+export async function deleteCandidate(id: number): Promise<void> {
+  const res = await fetch(`${API}/candidates/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete candidate");
+}
+
 export async function getNotes(candidateId: number): Promise<Note[]> {
   const res = await fetch(`${API}/candidates/${candidateId}/notes`);
   if (!res.ok) throw new Error("Failed to fetch notes");

@@ -40,6 +40,7 @@ Migrations are managed with Alembic (see `alembic/versions/`).
 | POST   | `/apply`                 | `{ name, age, phone, bio }`                       | created candidate       |
 | GET    | `/candidates`            | —                                                 | list of all candidates  |
 | POST   | `/candidates`            | `{ name, age, phone, bio, source }`               | created candidate       |
+| DELETE  | `/candidates/{id}`       | —                                                 | 204 No Content          |
 | POST   | `/candidates/{id}/vote`  | `{ "delta": 1\|-1, "voter": "jasper"\|"micol"\|"damia" }` | updated candidate       |
 | GET    | `/candidates/{id}/notes` | —                                                 | list of notes           |
 | POST   | `/candidates/{id}/notes` | `{ "content": "..." }`                            | created note            |

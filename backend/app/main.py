@@ -2,7 +2,7 @@ import json
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db import close_db, get_pool, init_db
@@ -147,6 +147,17 @@ async def vote(candidate_id: int, body: VoteRequest):
     )
     candidate = await _fetch_candidate_with_scores(candidate_id)
     return candidate
+
+
+@app.delete("/candidates/{candidate_id}", status_code=204)
+async def delete_candidate(candidate_id: int):
+    pool = await get_pool()
+    result = await pool.execute(
+        "DELETE FROM candidates WHERE id = $1", candidate_id
+    )
+    if result == "DELETE 0":
+        raise HTTPException(status_code=404, detail="Candidate not found")
+    return Response(status_code=204)
 
 
 @app.get("/candidates/{candidate_id}/notes", response_model=list[NoteResponse])

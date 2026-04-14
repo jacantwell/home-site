@@ -10,8 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { NotesSection } from "./notes-section";
-import { vote } from "@/lib/api";
+import { vote, deleteCandidate } from "@/lib/api";
 import { SWR_KEYS } from "@/lib/swr-keys";
 import { VOTERS } from "@/lib/types";
 import type { Candidate, Voter } from "@/lib/types";
@@ -36,6 +47,11 @@ export function CandidateCard({
     mutate(SWR_KEYS.candidates);
   }
 
+  async function handleDelete() {
+    await deleteCandidate(candidate.id);
+    mutate(SWR_KEYS.candidates);
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -54,6 +70,28 @@ export function CandidateCard({
             <Button variant="outline" size="sm" onClick={() => handleVote(1)}>
               +1
             </Button>
+            <AlertDialog>
+              <AlertDialogTrigger
+                render={<Button variant="destructive" size="sm" />}
+              >
+                Delete
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete {candidate.name}?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete this candidate and all their
+                    votes and notes. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <div className="flex items-center gap-3 text-sm pt-1">
