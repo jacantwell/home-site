@@ -8,22 +8,22 @@ import {
 
 const housemates = [
   {
-    name: "Alex",
-    initials: "A",
-    bio: "Software engineer who loves cooking and board games. Usually found in the kitchen experimenting with new recipes.",
-    interests: "Cooking, Board Games, Hiking",
-  },
-  {
-    name: "Jordan",
+    name: "Jasper",
     initials: "J",
-    bio: "Graphic designer and weekend surfer. Keeps the house looking great and always up for a beach trip.",
-    interests: "Design, Surfing, Photography",
+    bio: "25, software engineer, in the office 5 days a week. Very easy going — likes to keep things clean but not over the top with it. Loves cooking and will definitely be up for providing house meals.",
+    interests: "Bouldering, Cycling, The Pub",
   },
   {
-    name: "Sam",
-    initials: "S",
-    bio: "Grad student studying environmental science. Plant parent and early morning runner.",
-    interests: "Plants, Running, Sustainability",
+    name: "Damia",
+    initials: "D",
+    bio: "27, secondary school teacher. Very easy going, enjoys socialising but also values time to wind down. Works in the school Monday to Friday.",
+    interests: "Reading, Cooking, Hanging Out",
+  },
+  {
+    name: "Micol",
+    initials: "M",
+    bio: "Software engineer. Always ready to find a new hobby — currently into pottery and embroidery. Queer.",
+    interests: "Climbing, Water Sports, 5-a-side",
   },
 ];
 

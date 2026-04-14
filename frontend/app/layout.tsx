@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Home Site — Find Your New Housemates",
+  title: "Peckham House — 2 Rooms Available",
   description:
-    "We're 3 friends looking for 2 housemates. Apply to live with us!",
+    "3 friends looking for 2 housemates for a 5-bed house in Peckham. Moving in May.",
 };
 
 export default function RootLayout({

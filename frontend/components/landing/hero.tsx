@@ -5,8 +5,9 @@ export function Hero() {
         We&apos;re looking for 2 housemates
       </h1>
       <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-        We&apos;re 3 friends with a great house and room for 2 more. If you
-        think you&apos;d be a good fit, we&apos;d love to hear from you.
+        We&apos;re 3 friends moving into a 5-bed house in Peckham and
+        looking for 2 sociable people up for a good time — going to the
+        pub, playing board games, cooking together, that kind of thing.
       </p>
     </section>
   );
