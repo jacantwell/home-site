@@ -55,15 +55,15 @@ export function CandidateCard({
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
             <CardTitle className="flex items-center gap-2">
               {candidate.name}, {candidate.age}
-              <Badge variant="secondary">{candidate.source}</Badge>
+              <Badge variant="secondary" className="truncate max-w-[150px]">{candidate.source}</Badge>
             </CardTitle>
             <CardDescription>{candidate.phone}</CardDescription>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <Button variant="outline" size="sm" onClick={() => handleVote(-1)}>
               -1
             </Button>
