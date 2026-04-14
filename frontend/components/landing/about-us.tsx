@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { FlipCard } from "./flip-card";
+import { MorphingBlob } from "./morphing-blob";
 import { RotateCcw } from "lucide-react";
 
 const housemates = [
@@ -70,8 +71,49 @@ const itemVariants = {
 
 export function AboutUs() {
   return (
-    <section className="bg-lavender/30 py-20 px-4 sm:px-6">
-      <div className="mx-auto max-w-5xl">
+    <section className="relative overflow-hidden bg-lavender/30 py-20 px-4 sm:px-6">
+      <div className="pointer-events-none absolute inset-0">
+        {/* Top-right large nested cluster */}
+        <MorphingBlob
+          color="bg-damia/60" size="h-80 w-80" position="absolute -top-16 -right-16"
+          border="border-4 border-damia/30" parallaxSpeed={0.25} variant={2}
+        >
+          <MorphingBlob
+            color="bg-lavender" size="h-48 w-48" position="relative"
+            border="border-3 border-damia/20" variant={0}
+          />
+        </MorphingBlob>
+
+        {/* Top-left small accent */}
+        <MorphingBlob
+          color="bg-jasper/40" size="h-32 w-32" position="absolute -top-8 left-12"
+          border="border-3 border-jasper/25" parallaxSpeed={0.1} variant={1}
+        />
+
+        {/* Bottom-left nested cluster */}
+        <MorphingBlob
+          color="bg-micol/50" size="h-64 w-64" position="absolute -bottom-20 -left-16"
+          border="border-4 border-micol/30" parallaxSpeed={-0.15} variant={3}
+        >
+          <MorphingBlob
+            color="bg-mint" size="h-36 w-36" position="relative"
+            border="border-3 border-micol/20" variant={1}
+          />
+        </MorphingBlob>
+
+        {/* Mid-right small accent */}
+        <MorphingBlob
+          color="bg-sunshine/50" size="h-24 w-24" position="absolute top-1/2 -right-6"
+          border="border-3 border-sunshine/30" parallaxSpeed={-0.2} variant={0}
+        />
+
+        {/* Bottom-right small accent */}
+        <MorphingBlob
+          color="bg-peach/40" size="h-20 w-20" position="absolute -bottom-4 right-1/4"
+          border="border-2 border-peach/30" parallaxSpeed={0.15} variant={2}
+        />
+      </div>
+      <div className="relative z-10 mx-auto max-w-5xl">
         <motion.h2
           className="font-display text-4xl font-bold text-center mb-12"
           initial={{ opacity: 0, y: 30 }}

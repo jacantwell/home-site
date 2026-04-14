@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import { MorphingBlob } from "./morphing-blob";
 
 const heroPhotos = [
   { src: "/photos/house/house1.jpeg", alt: "Front of the house" },
@@ -12,11 +13,41 @@ const heroPhotos = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-jasper via-damia to-micol py-20 px-6 text-center text-white sm:py-28">
-      {/* Decorative blobs */}
+      {/* Morphing decorative blobs — nested, sharp, bold */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-sunshine opacity-30 blur-3xl" />
-        <div className="absolute -right-16 top-1/3 h-72 w-72 rounded-full bg-peach opacity-25 blur-3xl" />
-        <div className="absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-mint opacity-30 blur-3xl" />
+        {/* Large top-left nested cluster */}
+        <MorphingBlob
+          color="bg-sunshine" size="h-80 w-80" position="absolute -top-20 -left-20"
+          border="border-4 border-white/30" parallaxSpeed={0.3} variant={0}
+        >
+          <MorphingBlob
+            color="bg-peach" size="h-48 w-48" position="relative"
+            border="border-3 border-white/20" variant={2}
+          />
+        </MorphingBlob>
+
+        {/* Mid-right small accent */}
+        <MorphingBlob
+          color="bg-lavender/70" size="h-28 w-28" position="absolute top-8 right-12"
+          border="border-3 border-white/25" parallaxSpeed={0.15} variant={3}
+        />
+
+        {/* Bottom-right nested cluster */}
+        <MorphingBlob
+          color="bg-mint" size="h-64 w-64" position="absolute -bottom-16 -right-10"
+          border="border-4 border-white/30" parallaxSpeed={-0.2} variant={1}
+        >
+          <MorphingBlob
+            color="bg-sky/60" size="h-36 w-36" position="relative"
+            border="border-3 border-white/20" variant={3}
+          />
+        </MorphingBlob>
+
+        {/* Bottom-left small accent */}
+        <MorphingBlob
+          color="bg-jasper-light/60" size="h-24 w-24" position="absolute bottom-4 left-1/4"
+          border="border-3 border-white/20" parallaxSpeed={-0.1} variant={2}
+        />
       </div>
 
       <div className="relative z-10">

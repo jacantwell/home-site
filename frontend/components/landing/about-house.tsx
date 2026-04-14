@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { MapPin, PoundSterling, Home, Beer } from "lucide-react";
 import Image from "next/image";
+import { MorphingBlob } from "./morphing-blob";
 
 const facts = [
   {
@@ -65,8 +66,49 @@ const photoVariants = {
 
 export function AboutHouse() {
   return (
-    <section className="bg-gradient-to-br from-peach/40 to-sunshine/40 py-20 px-4 sm:px-6">
-      <div className="mx-auto max-w-5xl">
+    <section className="relative overflow-hidden bg-gradient-to-br from-peach/40 to-sunshine/40 py-20 px-4 sm:px-6">
+      <div className="pointer-events-none absolute inset-0">
+        {/* Top-left nested cluster */}
+        <MorphingBlob
+          color="bg-jasper/50" size="h-72 w-72" position="absolute -top-12 -left-20"
+          border="border-4 border-jasper/30" parallaxSpeed={0.35} variant={1}
+        >
+          <MorphingBlob
+            color="bg-peach" size="h-44 w-44" position="relative"
+            border="border-3 border-jasper/20" variant={3}
+          />
+        </MorphingBlob>
+
+        {/* Top-right small */}
+        <MorphingBlob
+          color="bg-damia/40" size="h-28 w-28" position="absolute top-4 right-16"
+          border="border-3 border-damia/25" parallaxSpeed={0.2} variant={2}
+        />
+
+        {/* Mid-left small accent */}
+        <MorphingBlob
+          color="bg-micol/35" size="h-20 w-20" position="absolute top-1/2 left-4"
+          border="border-2 border-micol/25" parallaxSpeed={-0.1} variant={0}
+        />
+
+        {/* Bottom-right nested cluster */}
+        <MorphingBlob
+          color="bg-sunshine/60" size="h-64 w-64" position="absolute -bottom-16 -right-12"
+          border="border-4 border-sunshine/40" parallaxSpeed={-0.25} variant={0}
+        >
+          <MorphingBlob
+            color="bg-sky/50" size="h-36 w-36" position="relative"
+            border="border-3 border-sky/30" variant={2}
+          />
+        </MorphingBlob>
+
+        {/* Bottom-left small */}
+        <MorphingBlob
+          color="bg-lavender/50" size="h-24 w-24" position="absolute -bottom-6 left-1/3"
+          border="border-3 border-lavender/30" parallaxSpeed={0.15} variant={3}
+        />
+      </div>
+      <div className="relative z-10 mx-auto max-w-5xl">
         <motion.h2
           className="font-display text-4xl font-bold text-center mb-12"
           initial={{ opacity: 0, y: 30 }}

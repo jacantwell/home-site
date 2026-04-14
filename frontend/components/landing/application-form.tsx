@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
+import { MorphingBlob } from "./morphing-blob";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,9 +48,28 @@ export function ApplicationForm() {
 
   if (success) {
     return (
-      <section className="py-20 px-4 sm:px-6">
+      <section className="relative overflow-hidden py-20 px-4 sm:px-6">
+        <div className="pointer-events-none absolute inset-0">
+          <MorphingBlob
+            color="bg-sky/40" size="h-56 w-56" position="absolute top-1/4 -right-20"
+            border="border-4 border-sky/30" parallaxSpeed={0.2} variant={3}
+          >
+            <MorphingBlob
+              color="bg-damia/30" size="h-28 w-28" position="relative"
+              border="border-3 border-damia/20" variant={1}
+            />
+          </MorphingBlob>
+          <MorphingBlob
+            color="bg-jasper/30" size="h-32 w-32" position="absolute -bottom-8 -left-10"
+            border="border-3 border-jasper/20" parallaxSpeed={-0.15} variant={0}
+          />
+          <MorphingBlob
+            color="bg-mint/40" size="h-20 w-20" position="absolute top-8 left-1/4"
+            border="border-2 border-mint/30" parallaxSpeed={0.1} variant={2}
+          />
+        </div>
         <motion.div
-          className="mx-auto max-w-lg"
+          className="relative z-10 mx-auto max-w-lg"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -89,8 +109,19 @@ export function ApplicationForm() {
   }
 
   return (
-    <section className="py-20 px-4 sm:px-6">
-      <div className="mx-auto max-w-lg">
+    <section className="relative overflow-hidden py-20 px-4 sm:px-6">
+      <div className="pointer-events-none absolute inset-0">
+        <MorphingBlob
+          color="bg-sky/40" size="h-56 w-56" position="absolute top-1/4 -right-20"
+          border="border-4 border-sky/30" parallaxSpeed={0.2} variant={3}
+        >
+          <MorphingBlob
+            color="bg-damia/30" size="h-28 w-28" position="relative"
+            border="border-3 border-damia/20" variant={1}
+          />
+        </MorphingBlob>
+      </div>
+      <div className="relative z-10 mx-auto max-w-lg">
         <motion.h2
           className="font-display text-4xl font-bold text-center mb-10 text-sky"
           initial={{ opacity: 0, y: 30 }}
