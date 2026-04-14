@@ -10,6 +10,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  --font-display: var(--font-space-grotesk);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,6 +47,17 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-jasper: var(--color-jasper);
+  --color-jasper-light: var(--color-jasper-light);
+  --color-damia: var(--color-damia);
+  --color-damia-light: var(--color-damia-light);
+  --color-micol: var(--color-micol);
+  --color-micol-light: var(--color-micol-light);
+  --color-sunshine: var(--color-sunshine);
+  --color-sky: var(--color-sky);
+  --color-peach: var(--color-peach);
+  --color-lavender: var(--color-lavender);
+  --color-mint: var(--color-mint);
 }
 
 :root {
@@ -73,6 +85,17 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
+  --color-jasper: oklch(0.65 0.25 30);
+  --color-jasper-light: oklch(0.92 0.08 30);
+  --color-damia: oklch(0.65 0.22 280);
+  --color-damia-light: oklch(0.92 0.07 280);
+  --color-micol: oklch(0.72 0.19 165);
+  --color-micol-light: oklch(0.93 0.06 165);
+  --color-sunshine: oklch(0.88 0.18 90);
+  --color-sky: oklch(0.72 0.15 230);
+  --color-peach: oklch(0.82 0.12 55);
+  --color-lavender: oklch(0.82 0.1 300);
+  --color-mint: oklch(0.9 0.08 165);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
