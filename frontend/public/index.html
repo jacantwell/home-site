@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peckham 5-Bed Rental Market — Research Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0e1117;
+    --panel: #161b22;
+    --panel-2: #1c232c;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #ff7849;
+    --accent-2: #4fb3ff;
+    --good: #3fb950;
+    --bad: #f85149;
+    --warn: #d29922;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 32px 40px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 6px; font-size: 24px; font-weight: 600; }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 40px 48px;
+  }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  .kpi .value { font-size: 26px; font-weight: 600; margin-top: 4px; }
+  .kpi .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi.accent .value { color: var(--accent); }
+  .kpi.good .value { color: var(--good); }
+  .kpi.bad .value { color: var(--bad); }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .grid.full { grid-template-columns: 1fr; }
+  @media (max-width: 1000px) {
+    .grid, .grid.three { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .panel h2 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .panel .subtitle {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .chart-wrap { position: relative; height: 340px; }
+  .chart-wrap.tall { height: 420px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+  }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .badge.let { background: rgba(63,185,80,0.15); color: var(--good); }
+  .badge.stale { background: rgba(248,81,73,0.15); color: var(--bad); }
+  .badge.warm { background: rgba(210,153,34,0.15); color: var(--warn); }
+  .badge.fresh { background: rgba(79,179,255,0.15); color: var(--accent-2); }
+  .takeaway {
+    background: var(--panel-2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .takeaway strong { color: var(--accent); }
+  .legend-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  .footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .footer a { color: var(--accent-2); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Peckham 5-Bed Rental Market — Research Dashboard</h1>
+  <p>Snapshot taken 2026-05-13 · Rightmove + Zoopla + ONS Q1 2026 release</p>
+</header>
+
+<div class="container">
+
+  <!-- KPI strip -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="label">Live listings (Rightmove)</div>
+      <div class="value">10</div>
+      <div class="sub">5-bed houses in Peckham</div>
+    </div>
+    <div class="kpi accent">
+      <div class="label">Most common ask</div>
+      <div class="value">£4,750</div>
+      <div class="sub">4 of 10 listings — clustering</div>
+    </div>
+    <div class="kpi">
+      <div class="label">SE15 4+ bed median (ONS)</div>
+      <div class="value">£3,300</div>
+      <div class="sub">Actual rents Apr-25 to Mar-26</div>
+    </div>
+    <div class="kpi bad">
+      <div class="label">Asking vs ONS median</div>
+      <div class="value">+44%</div>
+      <div class="sub">£4,750 ask vs £3,300 SE15 median</div>
+    </div>
+    <div class="kpi good">
+      <div class="label">Negotiating target</div>
+      <div class="value">£4,400–4,600</div>
+      <div class="sub">Defensible against market data</div>
+    </div>
+  </div>
+
+  <!-- Asking vs clearing comparison -->
+  <div class="grid full">
+    <div class="panel">
+      <h2>The asking-vs-clearing gap</h2>
+      <div class="subtitle">Current asking prices for 5-bed houses (orange) plotted against the official ONS rental distribution for 4+ bed properties in SE15 (blue band)</div>
+      <div class="chart-wrap tall">
+        <canvas id="askingVsClearing"></canvas>
+      </div>
+      <div class="takeaway">
+        <strong>The gap is the story.</strong> Even the lowest current asking price (£4,500) sits above the SE15 4+ bed <em>upper quartile</em> (£3,600). The £4,750 cluster is 44% above the SE15 median. Some of that gap reflects 5-bed-specific premium over the 4+ bed average — but not all of it.
+      </div>
+    </div>
+  </div>
+
+  <!-- Price vs days on market -->
+  <div class="grid">
+    <div class="panel">
+      <h2>Asking price vs days on market</h2>
+      <div class="subtitle">Stale listings reveal where the market is actually pricing</div>
+      <div class="chart-wrap">
+        <canvas id="priceVsDays"></canvas>
+      </div>
+      <div class="takeaway">
+        <strong>£4,500 listings have averaged ~30 days unlet.</strong> Hollydale Road has been on the market 60 days at £4,500. The Shenley Road outlier (£4,900, 307 days) is included for context — a 10-month-old listing tells you the upper-£4ks does not clear without effort.
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Distribution of asking prices</h2>
+      <div class="subtitle">Current 5-bed asking prices in Peckham (n=10)</div>
+      <div class="chart-wrap">
+        <canvas id="priceHist"></canvas>
+      </div>
+      <div class="takeaway">
+        <strong>£4,750 is the modal asking price</strong> — four landlords are anchored here, none have let in 7+ days. Two landlords are at £4,500. The £5,000+ band is sparse and slow.
+      </div>
+    </div>
+  </div>
+
+  <!-- ONS comparator chart + table -->
+  <div class="grid">
+    <div class="panel">
+      <h2>ONS 4+ bed median rent by postcode</h2>
+      <div class="subtitle">Q1 2026 release — actual rents recorded Apr 2025 to Mar 2026</div>
+      <div class="chart-wrap">
+        <canvas id="onsComparator"></canvas>
+      </div>
+      <div class="legend-note">SE15 = Peckham/Nunhead. SE5 = Camberwell. SE22 = East Dulwich. SE14 = New Cross. SE4 = Brockley.</div>
+    </div>
+
+    <div class="panel">
+      <h2>ONS rent percentiles — Southwark vs SE15</h2>
+      <div class="subtitle">4+ bedroom properties only</div>
+      <div class="chart-wrap">
+        <canvas id="onsPercentiles"></canvas>
+      </div>
+      <div class="takeaway">
+        SE15 specifically sits ~£200/month <em>below</em> the borough-wide Southwark 4+ bed median — Peckham is one of the cheaper parts of the borough for larger homes.
+      </div>
+    </div>
+  </div>
+
+  <!-- Listings table -->
+  <div class="grid full">
+    <div class="panel">
+      <h2>All current Peckham 5-bed listings</h2>
+      <div class="subtitle">Includes let-agreed properties from the last 2-3 months</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Area</th>
+            <th class="num">Asking (pcm)</th>
+            <th class="num">Beds/Baths</th>
+            <th class="num">Listed</th>
+            <th class="num">Days</th>
+            <th>Status</th>
+            <th>Agent</th>
+          </tr>
+        </thead>
+        <tbody id="listingsTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Negotiation talking points -->
+  <div class="grid full">
+    <div class="panel">
+      <h2>Negotiation talking points</h2>
+      <ol style="margin: 0; padding-left: 22px; font-size: 13.5px; line-height: 1.7;">
+        <li><strong>Cite the ONS data directly.</strong> "The official ONS rental data for SE15 shows the median 4+ bed rent at £3,300 and the upper quartile at £3,600. Even allowing for 5-bed specifics, £4,500 is already above market."</li>
+        <li><strong>Three near-identical OpenRent properties (Kincaid / Crewys / Dayton Grove) all asking £4,750 — none have let in 7 days.</strong> Same landlord, identical wording. Clear evidence £4,750 is aspirational, not clearing.</li>
+        <li><strong>Hollydale Road has been at £4,500 for 60 days with no reduction.</strong> Confirms the £4,500 band exists but is sticky — landlords are testing, tenants are not biting.</li>
+        <li><strong>Use the Lanvanor/Fenham/Nutcroft inconsistency.</strong> Same agent (Gareth James) prices Lanvanor (1,065 sq ft) at £5,500 but Nutcroft (1,260 sq ft) at £5,000. They're not pricing on fundamentals.</li>
+        <li><strong>Use the Camberwell SE5 let-agreed comparator.</strong> A Victorian 5-bed asked £4,900 and took ~8 weeks to let. Anything sub-Camberwell quality should price below that.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="footer">
+    Sources:
+    <a href="https://www.rightmove.co.uk/property-to-rent/Peckham.html?minBedrooms=5&maxBedrooms=5">Rightmove</a> ·
+    <a href="https://www.zoopla.co.uk/to-rent/houses/peckham/?beds_min=5&beds_max=5">Zoopla</a> ·
+    <a href="https://www.ons.gov.uk/economy/inflationandpriceindices/adhocs/3389privaterentalmarketinlondonapril2025tomarch2026">ONS Q1 2026 London rental dataset</a>
+    <br>
+    See <code>research.md</code> for the full writeup and <code>listings.csv</code> for the raw data.
+  </div>
+</div>
+
+<script>
+// --- Data ------------------------------------------------------------------
+
+const listings = [
+  { addr: "Montpelier Road",          area: "Peckham",         price: 4750, beds: 5, baths: 1, listed: "2026-05-13", days: 0,   agent: "Gareth James",   status: "fresh" },
+  { addr: "Gibbon Road",              area: "Nunhead SE15",    price: 4500, beds: 5, baths: 1, listed: "2026-05-09", days: 4,   agent: "Maurice Louis",  status: "fresh" },
+  { addr: "Kincaid Road",             area: "SE15",            price: 4750, beds: 5, baths: 1, listed: "2026-05-06", days: 7,   agent: "OpenRent",       status: "fresh" },
+  { addr: "Crewys Road",              area: "SE15",            price: 4750, beds: 5, baths: 2, listed: "2026-05-06", days: 7,   agent: "OpenRent",       status: "fresh" },
+  { addr: "Dayton Grove",             area: "SE15",            price: 4750, beds: 5, baths: 2, listed: "2026-05-06", days: 7,   agent: "OpenRent",       status: "fresh" },
+  { addr: "Fenham Road",              area: "Peckham SE15",    price: 4995, beds: 5, baths: 2, listed: "2026-04-28", days: 15,  agent: "Gareth James",   status: "warm" },
+  { addr: "Lanvanor Road",            area: "SE15",            price: 5500, beds: 5, baths: 2, listed: "2026-04-28", days: 15,  agent: "Gareth James",   status: "warm" },
+  { addr: "Nutcroft Road",            area: "Peckham SE15",    price: 5000, beds: 5, baths: 2, listed: "2026-04-28", days: 15,  agent: "Gareth James",   status: "warm" },
+  { addr: "Hollydale Road",           area: "SE15",            price: 4500, beds: 5, baths: 1, listed: "2026-03-15", days: 59,  agent: "OpenRent",       status: "stale" },
+  { addr: "Shenley Road",             area: "Camberwell SE5",  price: 4900, beds: 5, baths: 2, listed: "2025-07-10", days: 307, agent: "WeSoldIt.co.uk", status: "stale" },
+  { addr: "Gordon Road (LET)",        area: "SE15",            price: 6000, beds: 5, baths: 3, listed: "2026-03-25", days: 49,  agent: "Gareth James",   status: "let" },
+  { addr: "Camberwell SE5 (LET)",     area: "Camberwell SE5",  price: 4900, beds: 5, baths: 2, listed: "2026-03-19", days: 55,  agent: "KFH",            status: "let" },
+];
+
+const ons = {
+  southwark4plus: { lq: 3100, median: 3500, mean: 3534, uq: 4000, n: 120 },
+  se15_4plus:     { lq: 2875, median: 3300, mean: 3345, uq: 3600, n: 20  },
+  se5_4plus:      { lq: 3325, median: 3500, mean: 3520, uq: 3700, n: 10  },
+  se14_4plus:     { lq: 3225, median: 3500, mean: 3600, uq: 3800, n: 30  },
+  se22_4plus:     { lq: 2825, median: 3150, mean: 3233, uq: 3500, n: 30  },
+  se4_4plus:      { lq: 2825, median: 3200, mean: 3110, uq: 3500, n: 30  },
+};
+
+// Chart.js global defaults
+Chart.defaults.color = '#8b949e';
+Chart.defaults.borderColor = '#30363d';
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
+
+const statusColor = (s) => ({
+  fresh: '#4fb3ff',
+  warm:  '#d29922',
+  stale: '#f85149',
+  let:   '#3fb950',
+}[s] || '#8b949e');
+
+// --- Chart 1: Asking vs Clearing -----------------------------------------
+
+new Chart(document.getElementById('askingVsClearing'), {
+  type: 'bar',
+  data: {
+    labels: listings.filter(l => l.status !== 'let').map(l => l.addr),
+    datasets: [
+      {
+        label: 'Asking price (pcm)',
+        data: listings.filter(l => l.status !== 'let').map(l => l.price),
+        backgroundColor: listings.filter(l => l.status !== 'let').map(l => statusColor(l.status) + 'cc'),
+        borderColor: listings.filter(l => l.status !== 'let').map(l => statusColor(l.status)),
+        borderWidth: 1,
+        order: 2,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          afterBody: (items) => {
+            const idx = items[0].dataIndex;
+            const l = listings.filter(l => l.status !== 'let')[idx];
+            return [`${l.area}`, `${l.days} days on market`, `Status: ${l.status}`];
+          }
+        }
+      },
+      annotation: {},
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        min: 2500,
+        max: 6000,
+        grid: { color: '#30363d33' },
+        title: { display: true, text: '£/month', color: '#8b949e' },
+        ticks: { callback: v => '£' + v.toLocaleString() },
+      },
+      x: { grid: { display: false }, ticks: { autoSkip: false, maxRotation: 45, minRotation: 35 } },
+    },
+  },
+  plugins: [{
+    id: 'onsBands',
+    beforeDraw: (chart) => {
+      const { ctx, chartArea, scales } = chart;
+      if (!chartArea) return;
+      const y = scales.y;
+      // SE15 4+ bed band (LQ to UQ)
+      const top = y.getPixelForValue(ons.se15_4plus.uq);
+      const bot = y.getPixelForValue(ons.se15_4plus.lq);
+      ctx.save();
+      ctx.fillStyle = 'rgba(79,179,255,0.10)';
+      ctx.fillRect(chartArea.left, top, chartArea.right - chartArea.left, bot - top);
+
+      // Median line
+      const med = y.getPixelForValue(ons.se15_4plus.median);
+      ctx.strokeStyle = '#4fb3ff';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6,4]);
+      ctx.beginPath();
+      ctx.moveTo(chartArea.left, med);
+      ctx.lineTo(chartArea.right, med);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Labels
+      ctx.fillStyle = '#4fb3ff';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('SE15 4+ bed median £3,300', chartArea.right - 8, med - 6);
+      ctx.fillText('LQ £2,875 — UQ £3,600 (shaded)', chartArea.right - 8, bot - 6);
+      ctx.restore();
+    },
+  }],
+});
+
+// --- Chart 2: Price vs Days on Market ------------------------------------
+
+new Chart(document.getElementById('priceVsDays'), {
+  type: 'scatter',
+  data: {
+    datasets: [{
+      label: 'Listing',
+      data: listings.filter(l => l.status !== 'let').map(l => ({
+        x: l.days,
+        y: l.price,
+        addr: l.addr,
+        status: l.status,
+      })),
+      pointRadius: 7,
+      pointHoverRadius: 9,
+      backgroundColor: ctx => ctx.raw ? statusColor(ctx.raw.status) + 'cc' : '#8b949e',
+      borderColor: ctx => ctx.raw ? statusColor(ctx.raw.status) : '#8b949e',
+      borderWidth: 1.5,
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.raw.addr} — £${ctx.raw.y.toLocaleString()} pcm, ${ctx.raw.x} days`,
+        }
+      },
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Days on market', color: '#8b949e' },
+        grid: { color: '#30363d33' },
+        type: 'logarithmic',
+        ticks: {
+          callback: v => Number.isInteger(Math.log10(v)) ? v : null,
+        },
+      },
+      y: {
+        title: { display: true, text: '£/month', color: '#8b949e' },
+        grid: { color: '#30363d33' },
+        ticks: { callback: v => '£' + v.toLocaleString() },
+      },
+    },
+  },
+});
+
+// --- Chart 3: Price histogram --------------------------------------------
+
+const priceBuckets = { '£4,500': 0, '£4,750': 0, '£4,900-£4,995': 0, '£5,000': 0, '£5,500': 0 };
+listings.filter(l => l.status !== 'let').forEach(l => {
+  if (l.price === 4500) priceBuckets['£4,500']++;
+  else if (l.price === 4750) priceBuckets['£4,750']++;
+  else if (l.price >= 4900 && l.price <= 4995) priceBuckets['£4,900-£4,995']++;
+  else if (l.price === 5000) priceBuckets['£5,000']++;
+  else if (l.price === 5500) priceBuckets['£5,500']++;
+});
+
+new Chart(document.getElementById('priceHist'), {
+  type: 'bar',
+  data: {
+    labels: Object.keys(priceBuckets),
+    datasets: [{
+      label: 'Listings',
+      data: Object.values(priceBuckets),
+      backgroundColor: ['#3fb95099','#ff7849cc','#d2992299','#d2992299','#f8514999'],
+      borderColor: ['#3fb950','#ff7849','#d29922','#d29922','#f85149'],
+      borderWidth: 1,
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { precision: 0, stepSize: 1 }, grid: { color: '#30363d33' }, title: { display: true, text: 'Listings', color: '#8b949e' } },
+      x: { grid: { display: false } },
+    },
+  },
+});
+
+// --- Chart 4: ONS Comparator ---------------------------------------------
+
+const postcodes = ['SE22', 'SE4', 'SE15', 'SE5', 'SE14'];
+const postcodeData = [ons.se22_4plus, ons.se4_4plus, ons.se15_4plus, ons.se5_4plus, ons.se14_4plus];
+
+new Chart(document.getElementById('onsComparator'), {
+  type: 'bar',
+  data: {
+    labels: postcodes,
+    datasets: [
+      {
+        label: 'Lower quartile',
+        data: postcodeData.map(d => d.lq),
+        backgroundColor: '#4fb3ff55',
+      },
+      {
+        label: 'Median',
+        data: postcodeData.map(d => d.median - d.lq),
+        backgroundColor: '#4fb3ffcc',
+      },
+      {
+        label: 'Upper quartile',
+        data: postcodeData.map(d => d.uq - d.median),
+        backgroundColor: '#ff7849cc',
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: {
+        callbacks: {
+          afterBody: (items) => {
+            const idx = items[0].dataIndex;
+            const d = postcodeData[idx];
+            return [`Median: £${d.median.toLocaleString()}`, `LQ–UQ: £${d.lq.toLocaleString()} – £${d.uq.toLocaleString()}`, `Sample size: ${d.n} rents`];
+          },
+        },
+      },
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: {
+        stacked: true,
+        beginAtZero: false,
+        min: 2500,
+        grid: { color: '#30363d33' },
+        title: { display: true, text: '£/month (4+ bed)', color: '#8b949e' },
+        ticks: { callback: v => '£' + v.toLocaleString() },
+      },
+    },
+  },
+});
+
+// --- Chart 5: Percentile comparison ---------------------------------------
+
+new Chart(document.getElementById('onsPercentiles'), {
+  type: 'bar',
+  data: {
+    labels: ['Lower quartile', 'Median', 'Mean', 'Upper quartile'],
+    datasets: [
+      {
+        label: 'Southwark borough',
+        data: [ons.southwark4plus.lq, ons.southwark4plus.median, ons.southwark4plus.mean, ons.southwark4plus.uq],
+        backgroundColor: '#ff7849cc',
+        borderColor: '#ff7849',
+        borderWidth: 1,
+      },
+      {
+        label: 'SE15 (Peckham)',
+        data: [ons.se15_4plus.lq, ons.se15_4plus.median, ons.se15_4plus.mean, ons.se15_4plus.uq],
+        backgroundColor: '#4fb3ffcc',
+        borderColor: '#4fb3ff',
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        beginAtZero: false,
+        min: 2500,
+        grid: { color: '#30363d33' },
+        title: { display: true, text: '£/month', color: '#8b949e' },
+        ticks: { callback: v => '£' + v.toLocaleString() },
+      },
+    },
+  },
+});
+
+// --- Table rendering ------------------------------------------------------
+
+const tbody = document.getElementById('listingsTbody');
+const statusLabel = { fresh: 'Fresh', warm: 'Stalling', stale: 'Stale', let: 'Let Agreed' };
+listings.forEach(l => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${l.addr}</td>
+    <td>${l.area}</td>
+    <td class="num">£${l.price.toLocaleString()}</td>
+    <td class="num">${l.beds}/${l.baths}</td>
+    <td class="num">${l.listed}</td>
+    <td class="num">${l.days}</td>
+    <td><span class="badge ${l.status}">${statusLabel[l.status]}</span></td>
+    <td>${l.agent}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+</script>
+
+</body>
+</html>

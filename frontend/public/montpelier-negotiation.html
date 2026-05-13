@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montpelier Road — £4,600 vs £4,750 break-even analysis</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0e1117;
+    --panel: #161b22;
+    --panel-2: #1c232c;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #ff7849;
+    --accent-2: #4fb3ff;
+    --good: #3fb950;
+    --bad: #f85149;
+    --warn: #d29922;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 32px 40px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 6px; font-size: 24px; font-weight: 600; }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 24px 40px 48px;
+  }
+  .scenario-box {
+    background: linear-gradient(135deg, rgba(255,120,73,0.08), rgba(79,179,255,0.06));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .scenario-box h2 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--accent); }
+  .scenario-box p { margin: 0 0 6px; font-size: 14px; }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  .kpi .value { font-size: 28px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .kpi .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi.accent .value { color: var(--accent); }
+  .kpi.good .value { color: var(--good); }
+  .kpi.bad .value { color: var(--bad); }
+  .kpi.warn .value { color: var(--warn); }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .grid.full { grid-template-columns: 1fr; }
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .panel h2 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .panel .subtitle {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .chart-wrap { position: relative; height: 360px; }
+  .chart-wrap.tall { height: 440px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+  }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .delta-positive { color: var(--good); font-weight: 500; }
+  .delta-negative { color: var(--bad); font-weight: 500; }
+  .delta-zero { color: var(--muted); }
+  .takeaway {
+    background: var(--panel-2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+  .takeaway strong { color: var(--accent); }
+  .caveat {
+    background: rgba(210,153,34,0.08);
+    border-left: 3px solid var(--warn);
+    padding: 14px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: var(--text);
+    margin-top: 14px;
+  }
+  .caveat strong { color: var(--warn); }
+  .control-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .control-bar label { font-size: 13px; color: var(--muted); }
+  input[type=range] { width: 240px; accent-color: var(--accent); }
+  .slider-value {
+    background: var(--panel-2);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .footer { margin-top: 28px; color: var(--muted); font-size: 12px; }
+  .footer a { color: var(--accent-2); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Montpelier Road — should the landlord hold out for £4,750?</h1>
+  <p>Break-even analysis · agreed rent withdrawn at £4,600, relisted at £4,750 · we move in in 15 days · 12-month tenancy assumed</p>
+</header>
+
+<div class="container">
+
+  <div class="scenario-box">
+    <h2>The decision</h2>
+    <p><strong>Scenario A — Accept our £4,600 offer:</strong> We move in in 15 days. Landlord receives £4,600 × 12 = <strong>£55,200</strong> over the year.</p>
+    <p><strong>Scenario B — Hold out for £4,750:</strong> Property sits empty until a new tenant is found, then £4,750 × 12 = £57,000. The gain is only <strong>£1,800/year</strong> (3.3%) — assuming they actually achieve the £4,750 ask.</p>
+    <p style="margin-top: 10px; color: var(--muted); font-size: 13px;">Question: how long can the property sit empty before the £150/month premium is wiped out?</p>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="kpis">
+    <div class="kpi accent">
+      <div class="label">Break-even vacancy</div>
+      <div class="value">~12 days</div>
+      <div class="sub">extra days empty past our move-in date</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Annual rent — £4,600</div>
+      <div class="value">£55,200</div>
+      <div class="sub">12 × £4,600</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Annual rent — £4,750</div>
+      <div class="value">£57,000</div>
+      <div class="sub">12 × £4,750</div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Upside if achieved</div>
+      <div class="value">£1,800</div>
+      <div class="sub">3.3% over the year</div>
+    </div>
+    <div class="kpi bad">
+      <div class="label">Daily cost of vacancy</div>
+      <div class="value">£151</div>
+      <div class="sub">at £4,600 daily equivalent</div>
+    </div>
+  </div>
+
+  <!-- Sensitivity chart -->
+  <div class="grid full">
+    <div class="panel">
+      <h2>Landlord's net rental income over a 1-year window</h2>
+      <div class="subtitle">X-axis = additional days of vacancy beyond our 15-day notice. Y-axis = total rent received in the next 365 days.</div>
+      <div class="chart-wrap tall">
+        <canvas id="sensitivityChart"></canvas>
+      </div>
+      <div class="takeaway">
+        <strong>The two lines cross at ~12 days.</strong> If the landlord finds a £4,750 tenant who moves in within 12 days of when we would have (i.e. within 27 days of today), they break even. Beyond that, they are strictly worse off than accepting our £4,600.
+      </div>
+    </div>
+  </div>
+
+  <!-- Cumulative income over time -->
+  <div class="grid full">
+    <div class="panel">
+      <h2>Cumulative rental income from today</h2>
+      <div class="subtitle">Day 0 = today. Adjust the slider to simulate how long the landlord waits before finding a £4,750 tenant.</div>
+      <div class="control-bar">
+        <label>Additional vacancy days for £4,750 tenant: <span class="slider-value" id="vacancyValue">12</span></label>
+        <input type="range" id="vacancySlider" min="0" max="90" value="12">
+      </div>
+      <div class="chart-wrap tall">
+        <canvas id="cumulativeChart"></canvas>
+      </div>
+      <div id="cumulativeTakeaway" class="takeaway"></div>
+    </div>
+  </div>
+
+  <!-- Sensitivity table -->
+  <div class="grid">
+    <div class="panel">
+      <h2>Sensitivity table</h2>
+      <div class="subtitle">Net rental income over 365 days from today, by vacancy length</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Extra vacancy days</th>
+            <th class="num">£4,750 net 1-yr income</th>
+            <th class="num">vs £4,600 baseline</th>
+          </tr>
+        </thead>
+        <tbody id="sensitivityTbody"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>How likely is a fast re-let?</h2>
+      <div class="subtitle">Comparable evidence from the same Peckham 5-bed market</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Comparable</th>
+            <th class="num">Asking</th>
+            <th class="num">Days unlet</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Kincaid Road (OpenRent)</td><td class="num">£4,750</td><td class="num">7+</td></tr>
+          <tr><td>Crewys Road (OpenRent)</td><td class="num">£4,750</td><td class="num">7+</td></tr>
+          <tr><td>Dayton Grove (OpenRent)</td><td class="num">£4,750</td><td class="num">7+</td></tr>
+          <tr><td>Hollydale Road</td><td class="num">£4,500</td><td class="num">60</td></tr>
+          <tr><td>Shenley Road (Camberwell)</td><td class="num">£4,900</td><td class="num">307</td></tr>
+          <tr><td>Camberwell SE5 (let agreed)</td><td class="num">£4,900</td><td class="num">~55</td></tr>
+        </tbody>
+      </table>
+      <div class="takeaway">
+        <strong>Zero evidence that £4,750 lets fast.</strong> Three near-identical Peckham 5-beds are already at £4,750 with no takers after a week. Even £4,500 doesn't always clear quickly. A 12-day re-let at £4,750 is wishful thinking.
+      </div>
+    </div>
+  </div>
+
+  <!-- Caveats -->
+  <div class="grid full">
+    <div class="panel">
+      <h2>Assumptions and caveats</h2>
+      <div class="caveat">
+        <strong>This analysis is conservative — actually favourable to the landlord.</strong> The break-even number ignores costs that work <em>against</em> Scenario B:
+        <ul style="margin: 10px 0 0 0; padding-left: 22px;">
+          <li><strong>Void costs:</strong> council tax, utilities, insurance all paid by the landlord while empty (~£300–£500/month combined).</li>
+          <li><strong>Re-letting fees:</strong> agent fees, marketing, referencing — typically 1 month's rent (£4,750) or a 5–10% fee.</li>
+          <li><strong>Tenant risk:</strong> we are confirmed, referenced and ready. A replacement tenant is unknown.</li>
+          <li><strong>£4,750 may not be achieved.</strong> If the landlord eventually drops to £4,500 (like Hollydale), the entire premium evaporates.</li>
+        </ul>
+        Once these costs are included, the real break-even falls to <strong>~3-5 days of additional vacancy.</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Daily rent equivalent calculated as monthly × 12 / 365. Both scenarios assume a 12-month tenancy. See <code>research.md</code> and <code>index.html</code> for wider market data.
+  </div>
+
+</div>
+
+<script>
+// --- Constants -----------------------------------------------------------
+
+const RENT_LOW  = 4600;
+const RENT_HIGH = 4750;
+const NOTICE_DAYS = 15;     // days from today until we move in
+const DAYS_PER_MONTH = 365 / 12;
+const dailyLow  = RENT_LOW  / DAYS_PER_MONTH;
+const dailyHigh = RENT_HIGH / DAYS_PER_MONTH;
+
+Chart.defaults.color = '#8b949e';
+Chart.defaults.borderColor = '#30363d';
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
+
+const fmtGBP = (v) => '£' + Math.round(v).toLocaleString();
+
+// --- Sensitivity chart ---------------------------------------------------
+// Income over a fixed 365-day window starting today.
+// Scenario A: 15 days empty, then 350 days at £4,600 → £4,600/30.42 × 350
+// Scenario B: 15+V days empty, then (350-V) days at £4,750
+
+const incomeA_365 = (365 - NOTICE_DAYS) * dailyLow;   // fixed
+function incomeB_365(extraVacancyDays) {
+  const paidDays = Math.max(0, 365 - NOTICE_DAYS - extraVacancyDays);
+  return paidDays * dailyHigh;
+}
+
+// Compute break-even precisely
+const breakEvenDays = (incomeA_365 / dailyHigh) - (365 - NOTICE_DAYS) + 0; // solve (350-V)*dHigh = 350*dLow
+const breakEvenExact = (365 - NOTICE_DAYS) - (incomeA_365 / dailyHigh);
+// Simplified: V = (350*dHigh - 350*dLow) / dHigh = 350 * (1 - dLow/dHigh)
+const BE = (365 - NOTICE_DAYS) * (1 - dailyLow / dailyHigh);
+
+const xs = Array.from({length: 91}, (_, i) => i);
+
+new Chart(document.getElementById('sensitivityChart'), {
+  type: 'line',
+  data: {
+    labels: xs,
+    datasets: [
+      {
+        label: 'Accept £4,600 now (baseline)',
+        data: xs.map(() => incomeA_365),
+        borderColor: '#4fb3ff',
+        backgroundColor: 'rgba(79,179,255,0.10)',
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      },
+      {
+        label: 'Hold out for £4,750',
+        data: xs.map(v => incomeB_365(v)),
+        borderColor: '#ff7849',
+        backgroundColor: 'rgba(255,120,73,0.10)',
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: {
+        callbacks: {
+          title: (items) => `+${items[0].label} days extra vacancy`,
+          label: (ctx) => `${ctx.dataset.label}: ${fmtGBP(ctx.parsed.y)}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Additional vacancy days (beyond 15-day notice)', color: '#8b949e' },
+        grid: { color: '#30363d33' },
+      },
+      y: {
+        title: { display: true, text: 'Total rent over next 365 days', color: '#8b949e' },
+        grid: { color: '#30363d33' },
+        ticks: { callback: v => fmtGBP(v) },
+      },
+    },
+  },
+  plugins: [{
+    id: 'breakEvenLine',
+    afterDraw: (chart) => {
+      const { ctx, chartArea, scales } = chart;
+      const xPx = scales.x.getPixelForValue(BE);
+      ctx.save();
+      ctx.strokeStyle = '#d29922';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4,4]);
+      ctx.beginPath();
+      ctx.moveTo(xPx, chartArea.top);
+      ctx.lineTo(xPx, chartArea.bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#d29922';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(`Break-even: ~${BE.toFixed(1)} days`, xPx + 6, chartArea.top + 16);
+      ctx.restore();
+    },
+  }],
+});
+
+// --- Cumulative chart ----------------------------------------------------
+
+const HORIZON = 380; // days
+const cumXs = Array.from({length: HORIZON + 1}, (_, i) => i);
+
+function cumulativeA() {
+  // 0..15: empty. 16..380: paying £4,600
+  return cumXs.map(d => {
+    if (d <= NOTICE_DAYS) return 0;
+    return (d - NOTICE_DAYS) * dailyLow;
+  });
+}
+
+function cumulativeB(extraVacancy) {
+  const startPay = NOTICE_DAYS + extraVacancy;
+  return cumXs.map(d => {
+    if (d <= startPay) return 0;
+    return (d - startPay) * dailyHigh;
+  });
+}
+
+const cumChart = new Chart(document.getElementById('cumulativeChart'), {
+  type: 'line',
+  data: {
+    labels: cumXs,
+    datasets: [
+      {
+        label: 'Accept £4,600',
+        data: cumulativeA(),
+        borderColor: '#4fb3ff',
+        backgroundColor: 'rgba(79,179,255,0.10)',
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: true,
+        tension: 0,
+      },
+      {
+        label: 'Hold for £4,750',
+        data: cumulativeB(12),
+        borderColor: '#ff7849',
+        backgroundColor: 'rgba(255,120,73,0.10)',
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: {
+        callbacks: {
+          title: (items) => `Day ${items[0].label}`,
+          label: (ctx) => `${ctx.dataset.label}: ${fmtGBP(ctx.parsed.y)}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Days from today', color: '#8b949e' },
+        grid: { color: '#30363d33' },
+        ticks: { maxTicksLimit: 12 },
+      },
+      y: {
+        title: { display: true, text: 'Cumulative rent received', color: '#8b949e' },
+        grid: { color: '#30363d33' },
+        ticks: { callback: v => fmtGBP(v) },
+      },
+    },
+  },
+});
+
+function updateCumulative(extraVacancy) {
+  cumChart.data.datasets[1].data = cumulativeB(extraVacancy);
+  cumChart.update('none');
+  const A_final = (HORIZON - NOTICE_DAYS) * dailyLow;
+  const B_final = Math.max(0, HORIZON - NOTICE_DAYS - extraVacancy) * dailyHigh;
+  const delta = B_final - A_final;
+  const el = document.getElementById('cumulativeTakeaway');
+  if (delta > 0) {
+    el.innerHTML = `<strong>Landlord wins by ${fmtGBP(delta)}</strong> over the next ${HORIZON} days — but only if they actually find a £4,750 tenant within ${extraVacancy} days of when we would have moved in.`;
+  } else if (delta === 0) {
+    el.innerHTML = `<strong>Exact break-even.</strong> At ${extraVacancy} days of extra vacancy, the £4,750 path matches accepting £4,600.`;
+  } else {
+    el.innerHTML = `<strong>Landlord loses ${fmtGBP(-delta)}</strong> over the next ${HORIZON} days by holding out at £4,750 with ${extraVacancy} days of extra vacancy.`;
+  }
+}
+
+const slider = document.getElementById('vacancySlider');
+const sliderVal = document.getElementById('vacancyValue');
+slider.addEventListener('input', (e) => {
+  const v = +e.target.value;
+  sliderVal.textContent = v;
+  updateCumulative(v);
+});
+updateCumulative(12);
+
+// --- Sensitivity table ----------------------------------------------------
+
+const tbody = document.getElementById('sensitivityTbody');
+const tableRows = [0, 5, 10, 12, 15, 20, 30, 45, 60, 90];
+tableRows.forEach(v => {
+  const inc = incomeB_365(v);
+  const delta = inc - incomeA_365;
+  const cls = delta > 50 ? 'delta-positive' : delta < -50 ? 'delta-negative' : 'delta-zero';
+  const sign = delta > 0 ? '+' : '';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${v} days</td>
+    <td class="num">${fmtGBP(inc)}</td>
+    <td class="num ${cls}">${sign}${fmtGBP(delta)}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+</script>
+
+</body>
+</html>

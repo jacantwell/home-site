@@ -1,0 +1,27 @@
+source,address,area,price_pcm,beds,baths,floor_sqft,property_type,listed_date,days_on_market,agent,notes
+Rightmove,Montpelier Road,Peckham,4750,5,1,,House,2026-05-13,0,Gareth James,Furnished; avail Jun 2026
+Rightmove,Gibbon Road,Nunhead SE15,4500,5,1,,Terraced,2026-05-09,4,Maurice Louis,Newly refurbished
+Rightmove,Kincaid Road,SE15,4750,5,1,,Terraced,2026-05-06,7,OpenRent,Same landlord as Crewys/Dayton
+Rightmove,Crewys Road,SE15,4750,5,2,1065,Terraced,2026-05-06,7,OpenRent,Same landlord as Kincaid/Dayton
+Rightmove,Dayton Grove,SE15,4750,5,2,,Terraced,2026-05-06,7,OpenRent,Same landlord as Kincaid/Crewys
+Rightmove,Fenham Road,Peckham SE15,4995,5,2,1083,Terraced,2026-04-28,15,Gareth James,Furnished
+Rightmove,Lanvanor Road,SE15,5500,5,2,1065,Terraced,2026-04-28,15,Gareth James,Same agent as Fenham/Nutcroft
+Rightmove,Nutcroft Road,Peckham SE15,5000,5,2,1260,Terraced,2026-04-28,15,Gareth James,Larger than Fenham at same price band
+Rightmove,Hollydale Road,SE15,4500,5,1,,Terraced,2026-03-15,59,OpenRent,Still listed after 2 months
+Rightmove,Shenley Road,Camberwell SE5,4900,5,2,1614,Terraced,2025-07-10,307,WeSoldIt.co.uk,On market 10 months - upper-band stall
+Zoopla close-match,Elsie Road,East Dulwich SE22,5250,5,2,,Detached,,,,Garage; private garden
+Zoopla close-match,New Cross Road,New Cross SE14,6200,5,2,,House,,,,Grade II listed; REDUCED
+Zoopla close-match,Marcia Road,SE1,5200,5,2,1300,House,,,,Furnished
+Zoopla close-match,Marcia Road,SE1,4200,5,2,,House,,,,House share; just added
+Zoopla close-match,Blackwater Street,East Dulwich SE22,3600,5,3,,House,,,,Notably cheap
+Zoopla close-match,Marcia Road,SE1,5499,5,2,1300,Town house,,,,REDUCED
+Zoopla close-match,Keat Close,SE1,5300,5,2,1500,Townhouse,,,,Zone 1
+Zoopla close-match,Keats Close,SE1,4100,5,3,,Townhouse,,,,Bermondsey
+Zoopla close-match,Lordship Lane,East Dulwich SE22,5000,5,3,1715,House,,,,3 floors
+Zoopla close-match,Drakefell Road,New Cross SE14,5300,5,1,,Victorian semi,,,,Conservation area
+Zoopla close-match,Searles Road,SE1,4800,5,2,,Town house,,,,REDUCED; ~146 sqm
+Zoopla close-match,Revelon Road,Brockley SE4,4800,5,3,,House,,,,Private rear garden
+Zoopla close-match,Bellefields Road,Stockwell SW9,5900,5,3,,Mid-terrace,,,,REDUCED; part-furnished
+Zoopla close-match,Bellefields Road,Stockwell SW9,5900,5,3,,Town house,,,,Part-furnished; just added
+Zoopla close-match,Frank Dixon Close,Dulwich SE21,8350,5,3,2038,Detached,,,,Dulwich Village
+Zoopla close-match,Harper Road,SE1,7500,5,3,1600,End-of-terrace,,,,3 levels
